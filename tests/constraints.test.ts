@@ -137,61 +137,61 @@ describe('Test Constraints Var', () => {
         expect(b.get()).to.equal(2) // Doesn't update reactively because we called get outside of the callback
     });
 
-    it('Errors in calculation', () => {
-        let a = new Var<number>(0)
-        let b = new Var(() => {
-            if (a.get() == 0) throw Error("BOOM!")
-            else return a.get() + 1
-        })
+    // it('Errors in calculation', () => {
+    //     let a = new Var<number>(0)
+    //     let b = new Var(() => {
+    //         if (a.get() == 0) throw Error("BOOM!")
+    //         else return a.get() + 1
+    //     })
 
-        expect(() => b.get()).to.throw("BOOM!")
-        expect(() => b.get()).to.throw("BOOM!") // should rethrow
+    //     expect(() => b.get()).to.throw("BOOM!")
+    //     expect(() => b.get()).to.throw("BOOM!") // should rethrow
 
-        a.set(1)
-        expect(b.get()).to.equal(2) // works now that the error has cleared up
+    //     a.set(1)
+    //     expect(b.get()).to.equal(2) // works now that the error has cleared up
 
-        a.set(0)
-        expect(() => b.get()).to.throw("BOOM!")
-        b.set(() => a.get() + 1)
-        expect(b.get()).to.equal(1)
-    })
+    //     a.set(0)
+    //     expect(() => b.get()).to.throw("BOOM!")
+    //     b.set(() => a.get() + 1)
+    //     expect(b.get()).to.equal(1)
+    // })
 
-    it("Errors are still lazy", () => {
-        let computed: string[] = []
-        let b = new Var<number>(() => {
-            computed.push("b")
-            throw Error("BOOM!")
-        })
+    // it("Errors are still lazy", () => {
+    //     let computed: string[] = []
+    //     let b = new Var<number>(() => {
+    //         computed.push("b")
+    //         throw Error("BOOM!")
+    //     })
 
-        expect(() => b.get()).to.throw("BOOM!")
-        expect(computed).to.deep.equal(["b"])
-        expect(() => b.get()).to.throw("BOOM!") // should rethrow
-        expect(computed).to.deep.equal(["b"]) // but not recalculate
-    })
+    //     expect(() => b.get()).to.throw("BOOM!")
+    //     expect(computed).to.deep.equal(["b"])
+    //     expect(() => b.get()).to.throw("BOOM!") // should rethrow
+    //     expect(computed).to.deep.equal(["b"]) // but not recalculate
+    // })
 
-    it('Errors throw non Error ', () => {
-        let a = new Var(() => {throw "BOOM!"})
-        let b = new Var(() => {throw null})
-        let c = new Var(() => {throw undefined})
+    // it('Errors throw non Error ', () => {
+    //     let a = new Var(() => {throw "BOOM!"})
+    //     let b = new Var(() => {throw null})
+    //     let c = new Var(() => {throw undefined})
 
-        expect(() => a.get()).to.throw().which.equals("BOOM!")
-        // chai doesn't work on falsy errors
-        try { b.get() } catch (error) { expect(error).to.equal(null) }
-        try { c.get() } catch (error) { expect(error).to.equal(undefined) }
-    })
+    //     expect(() => a.get()).to.throw().which.equals("BOOM!")
+    //     // chai doesn't work on falsy errors
+    //     try { b.get() } catch (error) { expect(error).to.equal(null) }
+    //     try { c.get() } catch (error) { expect(error).to.equal(undefined) }
+    // })
 
-    it('Direct circular dependency', () => {
-        let a = new Var<number>(1)
-        a.set(() => a.get() + 1)
+    // it('Direct circular dependency', () => {
+    //     let a = new Var<number>(1)
+    //     a.set(() => a.get() + 1)
 
-        expect(() => a.get()).to.throw("Circular dependency")
-    })
+    //     expect(() => a.get()).to.throw("Circular dependency")
+    // })
 
-    it('Indirect circular dependency', () => {
-        let a = new Var<number>(1)
-        let b = new Var(() => a.get() + 1)
-        a.set(() => b.get() + 1)
+    // it('Indirect circular dependency', () => {
+    //     let a = new Var<number>(1)
+    //     let b = new Var(() => a.get() + 1)
+    //     a.set(() => b.get() + 1)
 
-        expect(() => a.get()).to.throw("Circular dependency")
-    })
+    //     expect(() => a.get()).to.throw("Circular dependency")
+    // })
 });

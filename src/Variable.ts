@@ -8,8 +8,9 @@ import { Stack } from 'stack-typescript';
 export class Var<T extends Primitive>
 {
     /**
+     * Creates a new Constrained Variable given a value or function
      * 
-     * @param value 
+     * @param value A `Primitive` or function to evaluate
      */
     constructor(value: T | Constraint<T>) {
         this.set(value)
@@ -23,6 +24,9 @@ export class Var<T extends Primitive>
     private eval?: Constraint<T>;
     private dependants: Var<Primitive>[] = [];
 
+    /** 
+     * Set's isValid to false and invalidates dependants
+     **/
     private invalidate(): void {
         this.isValid = false;
         this.dependants.forEach(variable => {
@@ -33,6 +37,12 @@ export class Var<T extends Primitive>
         this.dependants = [];
     } 
 
+    /**
+     * Gets the value of the Constrained Variable
+     * 
+     * @returns the current value of the Constrained Variable, calculated if necessary
+     * @remarks will forces variable to compute value if `isInvalid == false`
+     */
     public get(): T {
         if(Var.stack.length) {
             this.dependants.push(Var.stack.top);
@@ -45,6 +55,12 @@ export class Var<T extends Primitive>
         }
         return this.value!
     }
+
+    /**
+     * Sets the value or evaluation function for the Constrained Variable
+     * 
+     * @param value A `Primitive` or function (constraint)
+     */
     public set(value: T | Constraint<T>): void {
         if(typeof value === 'function') {
             this.eval = value;
@@ -63,5 +79,11 @@ export class Var<T extends Primitive>
     }
 }
 
+/**
+ * Values to be stored by the constrained variable
+ */
 export type Primitive = string | number | boolean | bigint | symbol
+/**
+ * A function which can be stored by a constrained variable to compute its value
+ */
 export type Constraint<T> = () => T

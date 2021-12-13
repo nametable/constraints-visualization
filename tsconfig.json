@@ -16,5 +16,15 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["./src", "./tests"]
+  "include": ["./src", "./tests"],
+  "typedocOptions": {
+    "entryPointStrategy": "expand",
+    "entryPoints": [
+      "./src/ContainedVarProxyHandler.ts",
+      "./src/Variable.ts",
+      "./src/VariableContainer.ts"
+    ],
+    "excludePrivate": true,
+    "out": "docs"
+  }
 }

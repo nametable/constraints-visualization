@@ -1,6 +1,14 @@
 import { Var } from "./Variable"
 import { VariableContainer } from "./VariableContainer"
 
+/**
+ * This function returns a Javascript Proxy handler for proxying a constrained variable `Var`
+ * It will handle taking snapshots when changes are made to constrained variables through the proxy
+ * 
+ * @param container The container in which the proxy should place new variables or take snapshots in
+ * @param callback A callback for when the proxy takes a snapshot of state
+ * @returns A handler for a Javascript Proxy
+ */
 export const ContainedVarProxyHandler = (container: VariableContainer, callback: (container: VariableContainer) => void) => {
     
     const takeSnapshot = (description: string) => {
