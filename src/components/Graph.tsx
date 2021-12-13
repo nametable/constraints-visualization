@@ -133,7 +133,7 @@ const Graph = (props:GraphProps) => {
 
     simulation.on("tick", () => {
       link.attr("d", linkArc);
-      node.attr("transform", d => `translate(${d as any['x']},${d as any['y']})`); // TODO: make d more strict - should be SimpleVar with x any y
+      node.attr("transform", d => `translate(${(d as any)['x']},${(d as any)['y']})`); // TODO: make d more strict - should be SimpleVar with x any y
     });
 
   }
