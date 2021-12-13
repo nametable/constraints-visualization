@@ -6,29 +6,30 @@ import { ContainedVarProxyHandler } from "./ContainedVarProxyHandler";
 import { VariableContainer } from "./VariableContainer"
 import { Var as OrigVar, Primitive } from "./Variable"
 
-const container: VariableContainer = new VariableContainer();
-const handler = ContainedVarProxyHandler(container)
-const Var = new Proxy(OrigVar, handler);
-type Var<T extends Primitive> = OrigVar<T>;
-
-(window as any)['Var'] = Var;
-
-const a = new Var<number>(6)
-const b = new Var(3)
-const c = new Var(() => { return a.get() + 7})
-const e = new Var(() => { return b.get() * c.get()})
-c.get()
-e.get()
-const d = new Var(() => { return "test " + e.get().toString() })
-d.get()
-a.set(11)
-// a['invalidate']()
-container.snapshot("Test snapshot")
-// console.log(container.getSnapshot())
-
+// const a = new Var<number>(6)
+// const b = new Var(3)
+// const c = new Var(() => { return a.get() + 7})
+// const e = new Var(() => { return b.get() * c.get()})
+// c.get()
+// e.get()
+// const d = new Var(() => { return "test " + e.get().toString() })
+// d.get()
+// a.set(11)
 
 function App() {
-  const [count, setCount] = useState(0)
+  const initialContainer: VariableContainer = new VariableContainer();
+  initialContainer.snapshot("Start")
+  const handler = ContainedVarProxyHandler(initialContainer, (container) => {
+    setContainer(container)
+    setMaxSteps(container.length)
+    setStep(container.length - 1)
+  })
+  const Var = new Proxy(OrigVar, handler);
+  type Var<T extends Primitive> = OrigVar<T>;
+  
+  (window as any)['Var'] = Var;
+  
+  const [container, setContainer] = useState(initialContainer)
   const [maxSteps, setMaxSteps] = useState(container.length)
   const [step, setStep] = useState(container.length - 1)
 

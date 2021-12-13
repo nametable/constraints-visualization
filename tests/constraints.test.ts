@@ -4,7 +4,7 @@ import { VariableContainer } from "../src/VariableContainer";
 import { ContainedVarProxyHandler } from "../src/ContainedVarProxyHandler";
 
 const container: VariableContainer = new VariableContainer();
-const handler = ContainedVarProxyHandler(container)
+const handler = ContainedVarProxyHandler(container, () => {})
 const Var = new Proxy(OrigVar, handler);
 type Var<T extends Primitive> = OrigVar<T>;
 

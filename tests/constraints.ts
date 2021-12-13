@@ -37,7 +37,7 @@ describe("Var should have invalid value initially (function)", () => {
 })
 
 const container: VariableContainer = new VariableContainer();
-const handler = ContainedVarProxyHandler(container)
+const handler = ContainedVarProxyHandler(container, () => {})
 const Var = new Proxy(OrigVar, handler);
 
 let x = 4

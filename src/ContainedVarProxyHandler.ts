@@ -1,10 +1,17 @@
 import { Var } from "./Variable"
 import { VariableContainer } from "./VariableContainer"
 
-export const ContainedVarProxyHandler = (container: VariableContainer) => {
+export const ContainedVarProxyHandler = (container: VariableContainer, callback: (container: VariableContainer) => void) => {
+    
+    const takeSnapshot = (description: string) => {
+        container.snapshot(description)
+        console.log(container.getSnapshot(container.length - 1))
+        console.log(container)
+        callback(container)
+    }
+    
     const handler: ProxyHandler<typeof Var> = {
         construct: (target, argArray, newTarget) => {
-            console.log(`Creating new Constrained Variable with value ${argArray[0]}`)
             const varObj = new target(argArray[0])
             const varObjProxy = new Proxy(varObj, {
                 // apply: (target, thisArg, argArray) => {
@@ -19,12 +26,10 @@ export const ContainedVarProxyHandler = (container: VariableContainer) => {
                         return new Proxy(property, {
                             apply: (target, thisArg, argArray) => {
                                 // console.log(`Apply: ${target}, ${argArray}`)
-                                // const retVal = target.apply(thisArg, argArray)
+                                // const retVal = target.apply(receiver, argArray)
                                 const retVal = Reflect.apply(target, receiver, argArray)
-                                // const retVal = receiver[prop](...argArray)
-                                container.snapshot(`After ${String(prop)}${argArray}`)
-                                // container.setIndex(container.length - 1)
-                                console.log(container.getSnapshot(container.length - 1))
+                                takeSnapshot(`After ${String(prop)}${argArray}`)
+
                                 return retVal
                             }
                         })
@@ -45,6 +50,7 @@ export const ContainedVarProxyHandler = (container: VariableContainer) => {
                 }
             })
             container.add(varObj)
+            takeSnapshot(`After new with value ${argArray[0]}`)
             return varObjProxy
         },
     }
