@@ -11,7 +11,7 @@ const handler = ContainedVarProxyHandler(container)
 const Var = new Proxy(OrigVar, handler);
 type Var<T extends Primitive> = OrigVar<T>;
 
-window['Var'] = Var;
+(window as any)['Var'] = Var;
 
 const a = new Var<number>(6)
 const b = new Var(3)

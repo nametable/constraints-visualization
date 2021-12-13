@@ -54,9 +54,9 @@ const Graph = (props:GraphProps) => {
             .on("drag", dragged)
             .on("end", dragended);
       }
-
-    const simulation = d3.forceSimulation(nodes)
-        .force("link", d3.forceLink(links).id(d => d.id).distance(80))
+      
+    const simulation = d3.forceSimulation(nodes as any) // TODO: more strict typing
+        .force("link", d3.forceLink(links).id(d => (d as any)['id']).distance(80)) // TODO: more strict typing
         // .force("link", d3.forceLink(links).id(d => d.id))
         .force("charge", d3.forceManyBody().strength(-800))
         .force("x", d3.forceX())
@@ -94,7 +94,7 @@ const Graph = (props:GraphProps) => {
     // .attr("stroke", d => color(d.type))
     .attr("stroke", d => 'black')
     // .attr("marker-end", d => `url(${new URL(`#arrow-suit`, location)})`);
-    .attr("marker-end", d => `url(${new URL(`#arrow-suit`, location)})`);
+    .attr("marker-end", d => `url(${new URL(`#arrow-suit`, location as any)})`); // TODO: make location more strict
 
     const node = svg.append("g")
         .attr("fill", "currentColor")
@@ -103,7 +103,8 @@ const Graph = (props:GraphProps) => {
       .selectAll("g")
       .data(nodes)
       .join("g")
-        .call(drag(simulation));
+        // TODO: fixme sooon!
+        .call(drag(simulation) as any);
 
     node.append("circle")
         .attr("stroke", "yellow")
@@ -120,7 +121,8 @@ const Graph = (props:GraphProps) => {
         .attr("stroke", "white")
         .attr("stroke-width", 3);
 
-    const linkArc = (d) => {
+          // TODO: make typing more strict
+    const linkArc = (d: {source: any, target: any}) => {
       const r = Math.hypot(d.target.x - d.source.x, d.target.y - d.source.y);
       return `
         M${d.source.x},${d.source.y}
@@ -131,7 +133,7 @@ const Graph = (props:GraphProps) => {
 
     simulation.on("tick", () => {
       link.attr("d", linkArc);
-      node.attr("transform", d => `translate(${d.x},${d.y})`);
+      node.attr("transform", d => `translate(${d as any['x']},${d as any['y']})`); // TODO: make d more strict - should be SimpleVar with x any y
     });
 
   }

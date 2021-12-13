@@ -5,7 +5,7 @@ export abstract class BaseConstraint<T> {
 
 export class Var<T> extends BaseConstraint<T> {
     constructor(value: T)
-    set(value: T)
+    set(value: T): void
     // Readonly will keep you from directly modifying mutable objects, but its not actually a "deep" readonly
     // so we still need to document that mutation doesn't work.
     get(): Readonly<T>
