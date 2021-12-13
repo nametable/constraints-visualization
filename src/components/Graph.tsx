@@ -10,7 +10,7 @@ interface GraphProps {
 }
 const Graph = (props:GraphProps) => {
   
-  console.log(props)
+  // console.log(props)
 
   const data = {
     nodes: props.container.getSnapshot(props.index).vars.map(a => Object.assign({}, a)),
@@ -35,7 +35,7 @@ const Graph = (props:GraphProps) => {
 
     const nodes = data.nodes.map((node) => {return node});
     const links = data.links
-    console.log(data)
+    // console.log(data)
 
     const drag = (simulation: d3.Simulation<d3.SimulationNodeDatum, undefined>) => {
 
@@ -71,7 +71,7 @@ const Graph = (props:GraphProps) => {
 
     // simulation.nodes(nodes as any)
 
-    console.log(nodes)
+    // console.log(nodes)
 
     const t = svg.transition()
       .duration(750);
@@ -79,7 +79,8 @@ const Graph = (props:GraphProps) => {
     const update_nodes = svg.select(".node").selectAll("g")
       .data(nodes, (node) => { return (node as any)['id'] } ) // , (node) => { return node as any } 
       
-    console.log(update_nodes)
+    // console.log(update_nodes)
+    
 
       update_nodes
       .join(
@@ -108,7 +109,7 @@ const Graph = (props:GraphProps) => {
           .remove()
       )
       // .join("g")
-      console.log(links)
+      // console.log(links)
       const link = svg.select(".links").selectAll("path")
         .data(links)
         .join(
@@ -127,7 +128,7 @@ const Graph = (props:GraphProps) => {
         )
 
 
-    console.log(update_nodes)
+    // console.log(update_nodes)
     update_nodes
       .call(drag(simulation) as any);
 

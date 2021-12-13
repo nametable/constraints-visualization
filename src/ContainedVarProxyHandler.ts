@@ -5,8 +5,8 @@ export const ContainedVarProxyHandler = (container: VariableContainer, callback:
     
     const takeSnapshot = (description: string) => {
         container.snapshot(description)
-        console.log(container.getSnapshot(container.length - 1))
-        console.log(container)
+        // console.log(container.getSnapshot(container.length - 1))
+        // console.log(container)
         callback(container)
     }
     
