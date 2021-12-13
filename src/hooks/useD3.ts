@@ -5,9 +5,15 @@ export const useD3 = (renderChartFn: any, dependencies: any) => {
     const ref: React.MutableRefObject<any> = React.useRef(null);
 
     React.useEffect(() => {
-        console.log("Rendering node graph")
-        renderChartFn(d3.select(ref.current));
-        return () => {};
-      }, dependencies);
+      console.log("Rendering node graph")
+      renderChartFn(d3.select(ref.current));
+      return () => {};
+    });
+
+    // React.useEffect(() => {
+    //   console.log("Rendering node graph")
+    //   renderChartFn(d3.select(ref.current));
+    //   return () => {};
+    // }, dependencies);
     return ref;
 }
