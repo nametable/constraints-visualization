@@ -1,0 +1,27 @@
+/* GLOBAL RESET */
+body {
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  height: 100%;
+}
+
+#root {
+  margin: 0px;
+}
+
+.bar {
+  /* fill: green */
+}
+.bar:hover {
+  fill: red;
+  /* transform: translate(5,5,5) */
+  border-style: 3px solid;
+}
+
+.App {
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  height: 100%;
+}
