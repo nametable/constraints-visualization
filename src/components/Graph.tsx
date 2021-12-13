@@ -95,7 +95,7 @@ const Graph = (props:GraphProps) => {
           node
           .append("circle")
           .attr("stroke", "yellow")
-          .attr("fill", "orange")
+          .attr("fill", (d) => d.isValid ? '#51ff00' : '#ff66cd')
           .attr("stroke-width", 5)
           .attr("r", 25)
           node
@@ -111,6 +111,8 @@ const Graph = (props:GraphProps) => {
         },
         update => {
           update.select('text').text((d) => d['value'])
+          update.select('circle')
+            .attr("fill", (d) => d.isValid ? '#51ff00' : '#ff66cd')
           return update
         },
         exit => exit

@@ -24,7 +24,6 @@ export class Var<T extends Primitive>
     private dependants: Var<Primitive>[] = [];
 
     private invalidate(): void {
-    // private invalidate = (): void => {
         this.isValid = false;
         this.dependants.forEach(variable => {
             if (variable.isValid) {
@@ -34,7 +33,6 @@ export class Var<T extends Primitive>
         this.dependants = [];
     } 
 
-    // public get = (): T => {
     public get(): T {
         if(Var.stack.length) {
             this.dependants.push(Var.stack.top);
@@ -47,7 +45,6 @@ export class Var<T extends Primitive>
         }
         return this.value!
     }
-    // public set = (value: T | Constraint<T>): void => {
     public set(value: T | Constraint<T>): void {
         if(typeof value === 'function') {
             this.eval = value;

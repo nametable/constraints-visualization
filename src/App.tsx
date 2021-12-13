@@ -58,6 +58,7 @@ function App() {
           onChange={(evt) => {setStep(parseInt(evt.target.value))}}
         >
         </input>
+        <span>{container.getSnapshot(step).description}</span>
       </div>
     </div>
   )

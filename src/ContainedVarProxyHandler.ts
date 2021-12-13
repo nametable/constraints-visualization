@@ -5,8 +5,6 @@ export const ContainedVarProxyHandler = (container: VariableContainer, callback:
     
     const takeSnapshot = (description: string) => {
         container.snapshot(description)
-        // console.log(container.getSnapshot(container.length - 1))
-        // console.log(container)
         callback(container)
     }
     
@@ -28,22 +26,11 @@ export const ContainedVarProxyHandler = (container: VariableContainer, callback:
                                 // console.log(`Apply: ${target}, ${argArray}`)
                                 // const retVal = target.apply(receiver, argArray)
                                 const retVal = Reflect.apply(target, receiver, argArray)
-                                takeSnapshot(`After ${String(prop)}${argArray}`)
+                                takeSnapshot(`After ${String(prop)}${JSON.stringify(argArray)}`)
 
                                 return retVal
                             }
                         })
-                        // return function(this: any, ...argArray: any[]) {
-                        //     // console.log(`Apply: ${target}, ${argArray}`)
-                        //     // const retVal = target.apply(thisArg, argArray)
-                        //     console.log(this)
-                        //     const retVal = property.apply(this, argArray)
-                        //     // const retVal = receiver[prop](...argArray)
-                        //     container.snapshot(`After ${String(prop)}${argArray}`)
-                        //     container.setIndex(container.length - 1)
-                        //     console.log(container.getSnapshot())
-                        //     return retVal
-                        // }
                     }
             
                     return property
