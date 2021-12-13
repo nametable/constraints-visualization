@@ -1,6 +1,8 @@
 # Constraint Visualization
 
-This project provides an application for visualization the steps in using data constraints.
+This project provides an application for visualization of the steps in using data constraints.
+
+![Screenshot](./assets/constraint-vis-screenshot.png)
 
 ## Building
 
@@ -30,10 +32,10 @@ yarn docs
 // just type this directly into your browser console to test
 const test = new Var(55)
 const test2 = new Var(2)
-const test3 = new Var(() => { return test.get() * test2.get() }
+const test3 = new Var(() => { return test.get() * test2.get() })
 test3.get()
 const word = new Var("Testing123")
-word_len = new Var(() => {return word.get().length})
+word_len = new Var(() => { return word.get().length })
 word_len.get()
-sum_stuff = new Var(() => {return word_len.get() + test3.get()})
+sum_stuff = new Var(() => { return word_len.get() + test3.get() })
 ```
