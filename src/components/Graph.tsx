@@ -102,7 +102,7 @@ const Graph = (props:GraphProps) => {
           .append("text")
           .attr("x", -5)
           .attr("y", "0.31em")
-          .text(d => d['value'])
+          .text(d => JSON.stringify(d['value']))
         // .clone(true).lower()
         //   .attr("fill", "none")
         //   .attr("stroke", "white")
@@ -110,7 +110,7 @@ const Graph = (props:GraphProps) => {
           return node
         },
         update => {
-          update.select('text').text((d) => d['value'])
+          update.select('text').text((d) => JSON.stringify(d['value']))
           update.select('circle')
             .attr("fill", (d) => d.isValid ? '#51ff00' : '#ff66cd')
           return update

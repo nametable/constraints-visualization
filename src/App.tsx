@@ -25,11 +25,6 @@ function App() {
     })
 
     const Var = new Proxy(OrigVar, handler);
-    const a = new Var<number>(6)
-    const b = new Var(3)
-    const c = new Var(() => { return a.get() + 7 })
-    const e = new Var(() => { return b.get() * c.get() })
-    e.get();
     (window as any)['Var'] = Var;
 
   }, [])
