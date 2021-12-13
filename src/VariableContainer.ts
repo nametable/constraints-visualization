@@ -45,6 +45,17 @@ export class VariableContainer {
                 })
             })
         })
+        const {links, vars} = newSnapshot
+        const newStr = JSON.stringify({links, vars})
+        const oldSnapshot = this.getSnapshot(this.length - 1)
+        console.log(oldSnapshot)
+        if (oldSnapshot) {
+            const oldStr = JSON.stringify({links: oldSnapshot.links, vars: oldSnapshot.vars})
+            if (oldStr === newStr) {
+                console.log("Found duplicate snapshot")
+                return
+            }
+        }
         newSnapshot.description = description
         this.snapshots.push(newSnapshot)
     }

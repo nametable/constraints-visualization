@@ -1,6 +1,6 @@
 import * as d3 from "d3";
-import { Primitive as PrimitiveD3, SimulationNodeDatum, svg } from "d3";
-import { useEffect, useRef } from "react";
+import { Primitive as PrimitiveD3, SimulationNodeDatum, svg, Simulation } from "d3";
+import { useEffect, useRef, useState } from "react";
 import { useD3 } from "../hooks/useD3";
 import { VariableContainer } from "../VariableContainer";
 
@@ -20,6 +20,18 @@ const Graph = (props:GraphProps) => {
     }))
   }
 
+  // const [simulation, setSimulation] = useState<Simulation<SimulationNodeDatum, undefined>>()
+
+  const nodes = data.nodes.map((node) => {return node});
+  const links = data.links
+
+  const simulation = d3.forceSimulation(nodes as any) // TODO: more strict typing
+  .force("link", d3.forceLink(links).id(d => (d as any)['id']).distance(80)) // TODO: more strict typing
+  // .force("link", d3.forceLink(links).id(d => d.id))
+  .force("charge", d3.forceManyBody().strength(-800))
+  .force("x", d3.forceX())
+  .force("y", d3.forceY())
+
   const svgRef = useRef<SVGElement>()
 
   useEffect(() => {
@@ -33,8 +45,7 @@ const Graph = (props:GraphProps) => {
   const reDraw = (svg: d3.Selection<any, unknown, null, undefined>) => {
     console.log("Re-drawing")
 
-    const nodes = data.nodes.map((node) => {return node});
-    const links = data.links
+
     // console.log(data)
 
     const drag = (simulation: d3.Simulation<d3.SimulationNodeDatum, undefined>) => {
@@ -62,12 +73,7 @@ const Graph = (props:GraphProps) => {
           .on("end", dragended);
     }
     
-    const simulation = d3.forceSimulation(nodes as any) // TODO: more strict typing
-        .force("link", d3.forceLink(links).id(d => (d as any)['id']).distance(80)) // TODO: more strict typing
-        // .force("link", d3.forceLink(links).id(d => d.id))
-        .force("charge", d3.forceManyBody().strength(-800))
-        .force("x", d3.forceX())
-        .force("y", d3.forceY());
+
 
     // simulation.nodes(nodes as any)
 
@@ -82,7 +88,7 @@ const Graph = (props:GraphProps) => {
     // console.log(update_nodes)
     
 
-      update_nodes
+      const joined_nodes = update_nodes
       .join(
         enter => {
           const node = enter.append("g");
@@ -97,13 +103,16 @@ const Graph = (props:GraphProps) => {
           .attr("x", -5)
           .attr("y", "0.31em")
           .text(d => d['value'])
-        .clone(true).lower()
-          .attr("fill", "none")
-          .attr("stroke", "white")
-          .attr("stroke-width", 3)
+        // .clone(true).lower()
+        //   .attr("fill", "none")
+        //   .attr("stroke", "white")
+        //   .attr("stroke-width", 3)
           return node
         },
-        update => update,
+        update => {
+          update.select('text').text((d) => d['value'])
+          return update
+        },
         exit => exit
           .call(exit => exit.transition(t).remove())
           .remove()
@@ -129,7 +138,7 @@ const Graph = (props:GraphProps) => {
 
 
     // console.log(update_nodes)
-    update_nodes
+    joined_nodes
       .call(drag(simulation) as any);
 
     // update_nodes.exit().remove()
@@ -161,12 +170,12 @@ const Graph = (props:GraphProps) => {
     }
     //A${r},${r} 0 0,1 ${d.target.x},${d.target.y}
   
-    simulation.stop()
+    // simulation.stop()
     simulation.on("tick", () => {
       link.attr("d", linkArc);
-      update_nodes.attr("transform", d => `translate(${(d as any)['x']},${(d as any)['y']})`); // TODO: make d more strict - should be SimpleVar with x any y
+      joined_nodes.attr("transform", d => `translate(${(d as any)['x']},${(d as any)['y']})`); // TODO: make d more strict - should be SimpleVar with x any y
     });
-    simulation.restart()
+    // simulation.restart()
   }
 
   const initialDraw = (svg: d3.Selection<any, unknown, null, undefined>) => {
